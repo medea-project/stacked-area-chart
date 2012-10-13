@@ -29,7 +29,6 @@ var x = d3.time.scale()
     .range([0, width]);
 
 var y = d3.scale.linear()
-    .domain([0, 100])
     .range([height, 0]);
 
 var color = d3.scale.category10();
@@ -69,7 +68,7 @@ d3.tsv("data.tsv", function(error, data) {
     return {
       name: name,
       values: data.map(function(d) {
-        return {date: d.date, y: +d[name]};
+        return {date: d.date, y: d[name] / 100};
       })
     };
   }));
@@ -88,7 +87,7 @@ d3.tsv("data.tsv", function(error, data) {
 
   browser.append("text")
       .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.y + d.value.y0 / 2) + ")"; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.y0 + d.value.y / 2) + ")"; })
       .attr("x", -3)
       .attr("dy", ".35em")
       .style("text-anchor", "end")
